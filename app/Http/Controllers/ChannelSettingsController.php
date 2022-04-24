@@ -24,6 +24,8 @@ class ChannelSettingsController extends Controller
     {
         $this->authorize('update', $channel);
 
+        dd('woo');
+
         $attributes = $request->validated();
 
         $channel->fill($attributes)->save();

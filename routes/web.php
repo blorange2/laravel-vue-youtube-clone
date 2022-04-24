@@ -24,6 +24,6 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('channel/{channel/edit', [ChannelSettingsController::class, 'edit'])->name('channels.edit');
-    Route::patch('channel/{channel', [ChannelSettingsController::class, 'update'])->name('channels.update');
+    Route::get('channel/{channel}/edit', [ChannelSettingsController::class, 'edit'])->name('channels.edit');
+    Route::patch('channel/{channel}', [ChannelSettingsController::class, 'update'])->name('channels.update');
 });

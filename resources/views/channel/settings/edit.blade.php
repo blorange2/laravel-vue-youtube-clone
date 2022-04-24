@@ -14,7 +14,13 @@
 
                         <div class="form-group{{ $errors->has('name') ? 'has-error' : '' }}">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" value="{{ old('name') }}">
+                            <input type="text" class="form-control" id="name" value="{{ old('name', $channel->name) }}">
+
+                            @if ($errors->has('name'))
+                            <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('name') }}</strong>
+                            </span>
+                            @endif
                         </div>
 
                         <div class="form-group{{ $errors->has('slug') ? 'has-error' : '' }}">
@@ -24,19 +30,37 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon3">{{ config('app.url') }}</span>
                                 </div>
-                                <input type="text" class="form-control" id="slug" value="{{ old('slug') }}">
+                                <input type="text" class="form-control" id="slug" value="{{ old('slug', $channel->slug) }}">
                             </div>
+
+                            @if ($errors->has('slug'))
+                            <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('slug') }}</strong>
+                            </span>
+                            @endif
      
                         </div>
 
                         <div class="form-group{{ $errors->has('description') ? 'has-error' : '' }}">
                             <label for="description">Description</label>
-                            <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                            <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ old('description', $channel->description) }}</textarea>
+
+                            @if ($errors->has('description'))
+                            <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('description') }}</strong>
+                            </span>
+                            @endif
                         </div>
 
                         <div class="form-group{{ $errors->has('channel_image') ? 'has-error' : '' }}">
                             <label for="description">Channel image</label>
                             <input class="form-control" type="file" name="channel_image" id="channel_image">
+
+                            @if ($errors->has('channel_image'))
+                            <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('channel_image') }}</strong>
+                            </span>
+                            @endif
                         </div>
             
                         <button type="submit" class="btn btn-primary">Submit</button>

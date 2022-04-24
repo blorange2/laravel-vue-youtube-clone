@@ -24,8 +24,9 @@ class UpdateChannelRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255', 'unique:channels,name'],
-            'slug' => ['required', 'max:255', 'alpha_num', ],
-            'description' => ['nullable', 'string', 'max:1000']
+            'slug' => ['required', 'max:255', 'alpha_num'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'file' => ['nullable', 'file']
         ];
     }
 }
