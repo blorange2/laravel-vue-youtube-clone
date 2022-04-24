@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateChannelRequest;
+use App\Jobs\UploadImage;
 use App\Models\Channel;
 
 class ChannelSettingsController extends Controller
@@ -26,6 +27,12 @@ class ChannelSettingsController extends Controller
         $attributes = $request->validated();
 
         $channel->fill($attributes)->save();
+
+        if ($request->file('image')) {
+            $request->file('image')->move(storage_path() . '/uploads', $fileId = uniqid(true));
+
+            $this->dispatch(new UploadImage($channel, $fileId));
+        }
 
         return redirect()->route('channels.edit', $channel);
     }

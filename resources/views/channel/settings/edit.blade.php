@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Channel settings') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('channels.update', $channel) }}">
+                    <form method="POST" action="{{ route('channels.update', $channel) }}" enctype="multipart/form-data">
                         @csrf
                         @method('patch')
 
@@ -32,6 +32,11 @@
                         <div class="form-group{{ $errors->has('description') ? 'has-error' : '' }}">
                             <label for="description">Description</label>
                             <textarea class="form-control" name="description" id="description" cols="30" rows="10"></textarea>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('channel_image') ? 'has-error' : '' }}">
+                            <label for="description">Channel image</label>
+                            <input class="form-control" type="file" name="channel_image" id="channel_image">
                         </div>
             
                         <button type="submit" class="btn btn-primary">Submit</button>
