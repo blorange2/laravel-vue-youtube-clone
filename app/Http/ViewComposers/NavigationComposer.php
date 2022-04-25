@@ -7,7 +7,7 @@ class NavigationComposer
 {
     public function compose(View $view)
     {
-        if (!auth()) {
+        if (!auth()->check()) {
             return;
         }
 

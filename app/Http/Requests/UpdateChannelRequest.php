@@ -23,10 +23,10 @@ class UpdateChannelRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:255', 'unique:channels,name'],
+            'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'max:255', 'alpha_num'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'file' => ['nullable', 'file']
+            'channel_image' => ['nullable', 'file']
         ];
     }
 }

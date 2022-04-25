@@ -24,14 +24,12 @@ class ChannelSettingsController extends Controller
     {
         $this->authorize('update', $channel);
 
-        dd('woo');
-
         $attributes = $request->validated();
 
         $channel->fill($attributes)->save();
 
-        if ($request->file('image')) {
-            $request->file('image')->move(storage_path() . '/uploads', $fileId = uniqid(true));
+        if ($request->file('channel_image')) {
+            $request->file('channel_image')->move(storage_path() . '/uploads', $fileId = uniqid(true));
 
             $this->dispatch(new UploadImage($channel, $fileId));
         }

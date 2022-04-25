@@ -8,13 +8,13 @@
                 <div class="card-header">{{ __('Channel settings') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('channels.update', $channel) }}" enctype="multipart/form-data">
+                    <form action="{{ route('channels.update', $channel) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('patch')
 
-                        <div class="form-group{{ $errors->has('name') ? 'has-error' : '' }}">
+                        <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" value="{{ old('name', $channel->name) }}">
+                            <input type="text" name="name" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" value="{{ old('name', $channel->name) }}">
 
                             @if ($errors->has('name'))
                             <span class="invalid-feedback" role="alert">
@@ -23,27 +23,26 @@
                             @endif
                         </div>
 
-                        <div class="form-group{{ $errors->has('slug') ? 'has-error' : '' }}">
+                        <div class="form-group">
                             <label for="slug">Slug</label>
 
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">{{ config('app.url') }}</span>
+                                    <span class="input-group-text">{{ config('app.url') }}</span>
                                 </div>
-                                <input type="text" class="form-control" id="slug" value="{{ old('slug', $channel->slug) }}">
-                            </div>
+                                <input type="text" name="slug" class="form-control {{ $errors->has('slug') ? 'is-invalid' : '' }}" id="slug" value="{{ old('slug', $channel->slug) }}">
 
-                            @if ($errors->has('slug'))
-                            <span class="invalid-feedback" role="alert">
-                            <strong>{{ $errors->first('slug') }}</strong>
-                            </span>
-                            @endif
-     
+                                @if ($errors->has('slug'))
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('slug') }}</strong>
+                                </span>
+                                @endif
+                            </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('description') ? 'has-error' : '' }}">
+                        <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{ old('description', $channel->description) }}</textarea>
+                            <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description" id="description" cols="30" rows="10">{{ old('description', $channel->description) }}</textarea>
 
                             @if ($errors->has('description'))
                             <span class="invalid-feedback" role="alert">
@@ -52,9 +51,9 @@
                             @endif
                         </div>
 
-                        <div class="form-group{{ $errors->has('channel_image') ? 'has-error' : '' }}">
+                        <div class="form-group">
                             <label for="description">Channel image</label>
-                            <input class="form-control" type="file" name="channel_image" id="channel_image">
+                            <input class="form-control {{ $errors->has('channel_image') ? 'is-invalid' : '' }}" type="file" name="channel_image" id="channel_image">
 
                             @if ($errors->has('channel_image'))
                             <span class="invalid-feedback" role="alert">
