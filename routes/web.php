@@ -27,8 +27,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');
+    Route::post('upload', [VideoUploadController::class, 'store'])->name('video-uploads.store');
 
     Route::post('videos', [VideoController::class, 'store'])->name('videos.store');
+    Route::put('videos/{video}', [VideoController::class, 'update'])->name('videos.update');
 
     Route::get('channel/{channel}/edit', [ChannelSettingsController::class, 'edit'])->name('channels.edit');
     Route::patch('channel/{channel}', [ChannelSettingsController::class, 'update'])->name('channels.update');
