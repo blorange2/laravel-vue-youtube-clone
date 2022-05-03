@@ -10,6 +10,14 @@
 
                         <div class="video-form" v-if="uploading && !failed">
 
+                            <div class="alert alert-info" v-if="!uploadingComplete">
+                                Your video will be available at x
+                            </div>
+
+                            <div class="alert alert-success" v-if="uploadingComplete">
+                                Upload complete.
+                            </div>
+
                             <div class="progress mb-2" v-if="!uploadingComplete">
                                 <div class="progress-bar" v-bind:style="{width: fileProgress + '%'}"></div>
                             </div>
@@ -46,6 +54,7 @@
 
 <script>
     export default {
+        props: ['user', 'authenticated'],
         data(){
             return{
                 uid: null,
@@ -62,6 +71,13 @@
         mounted() {
             console.log('Component mounted.')
         },
+        ready() {
+            window.onbeforeunload = () => {
+                if(this.uploading && !this.uploadingComplete && !this.failed){
+                    return "Video upload in progress, are you sure you want to leave?";
+                }
+            }
+        },
         methods:{
             fileInputChange(){
                 this.uploading = true;
@@ -77,7 +93,7 @@
 
                     axios.post('/upload', form, {
                         onUploadProgress: progressEvent => {
-                            console.log(progressEvent.loaded / progressEvent.total);
+                            this.updateProgress(progressEvent);
                         }
                     })
                     .then(() => {
@@ -96,7 +112,7 @@
                     extension: this.file.name.split('.').pop()
                 };
 
-                axios.post('/videos', postData)
+                return axios.post('/videos', postData)
                     .then(response => {
                         console.log(response);
                         this.uid = response.data.data.uid;

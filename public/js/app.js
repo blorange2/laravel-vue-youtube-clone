@@ -2111,7 +2111,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['user', 'authenticated'],
   data: function data() {
     return {
       uid: null,
@@ -2128,22 +2137,39 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     console.log('Component mounted.');
   },
+  ready: function ready() {
+    var _this = this;
+
+    window.onbeforeunload = function () {
+      if (_this.uploading && !_this.uploadingComplete && !_this.failed) {
+        return "Video upload in progress, are you sure you want to leave?";
+      }
+    };
+  },
   methods: {
     fileInputChange: function fileInputChange() {
-      var _this = this;
+      var _this2 = this;
 
       this.uploading = true;
       this.failed = false;
       this.file = document.getElementById('video').files[0];
       this.store().then(function () {
         var form = new FormData();
-        form.append('video', _this.file);
-        form.append('uid', _this.uid);
-        console.log('Now need to upload');
+        form.append('video', _this2.file);
+        form.append('uid', _this2.uid);
+        axios.post('/upload', form, {
+          onUploadProgress: function onUploadProgress(progressEvent) {
+            _this2.updateProgress(progressEvent);
+          }
+        }).then(function () {
+          _this2.uploadingComplete = true;
+        })["catch"](function (error) {
+          console.log(error);
+        });
       });
     },
     store: function store() {
-      var _this2 = this;
+      var _this3 = this;
 
       var postData = {
         title: this.title,
@@ -2151,15 +2177,15 @@ __webpack_require__.r(__webpack_exports__);
         visibility: this.visibility,
         extension: this.file.name.split('.').pop()
       };
-      axios.post('/videos', postData).then(function (response) {
+      return axios.post('/videos', postData).then(function (response) {
         console.log(response);
-        _this2.uid = response.data.data.uid;
+        _this3.uid = response.data.data.uid;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     update: function update() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.saveStatus = 'Saving changes.';
       var postData = {
@@ -2168,13 +2194,13 @@ __webpack_require__.r(__webpack_exports__);
         visibility: this.visibility
       };
       axios.put('/videos/' + this.uid, postData).then(function (response) {
-        _this3.saveStatus = 'Saved changes.';
+        _this4.saveStatus = 'Saved changes.';
         setTimeout(function () {
-          _this3.saveStatus = null;
+          _this4.saveStatus = null;
         }, 3000);
       })["catch"](function (error) {
         console.log(error);
-        _this3.saveStatus = 'Failed to save changes.';
+        _this4.saveStatus = 'Failed to save changes.';
       });
     },
     updateProgress: function updateProgress(progressEvent) {
@@ -37671,6 +37697,22 @@ var render = function () {
             _vm._v(" "),
             _vm.uploading && !_vm.failed
               ? _c("div", { staticClass: "video-form" }, [
+                  !_vm.uploadingComplete
+                    ? _c("div", { staticClass: "alert alert-info" }, [
+                        _vm._v(
+                          "\n                            Your video will be available at x\n                        "
+                        ),
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.uploadingComplete
+                    ? _c("div", { staticClass: "alert alert-success" }, [
+                        _vm._v(
+                          "\n                            Upload complete.\n                        "
+                        ),
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
                   !_vm.uploadingComplete
                     ? _c("div", { staticClass: "progress mb-2" }, [
                         _c("div", {

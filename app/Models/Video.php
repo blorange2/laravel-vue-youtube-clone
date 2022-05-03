@@ -20,7 +20,10 @@ class Video extends Model
         'allow_votes',
         'allow_comments',
         'processed_percentage'
+    ];
 
+    protected $appends = [
+        'url'
     ];
 
     /**
@@ -37,5 +40,12 @@ class Video extends Model
     public function channel()
     {
         return $this->belongsTo(Channel::class, 'channel_id', 'id');
+    }
+
+    public function getUrlAttribute()
+    {
+        return !is_null($this->uid)
+            ? 'https://google.co.uk'
+            : null;
     }
 }
