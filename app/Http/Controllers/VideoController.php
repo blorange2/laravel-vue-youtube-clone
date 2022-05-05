@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
+    public function index(Request $request)
+    {
+        $videos = $request->user()->videos()->latestFirst()->paginate(10);
+
+        return view('videos.index', [
+            'videos' => $videos
+        ]);
+    }
+
     /**
      * Store a new video in the database.
      */

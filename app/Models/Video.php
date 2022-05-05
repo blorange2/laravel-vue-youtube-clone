@@ -48,4 +48,37 @@ class Video extends Model
             ? 'https://google.co.uk'
             : null;
     }
+
+    /**
+     * Helper function to determine if a video is processed.
+     */
+    public function isProcessed()
+    {
+        return $this->processed;
+    }
+
+    /**
+     * Getter for processed percentage.
+     */
+    public function processedPercentage()
+    {
+        return $this->processed_percentage;
+    }
+
+    public function getThumbnail()
+    {
+        if (!$this->isProcessed()) {
+            return 'http://placekitten.com/200/120';
+        }
+
+        return 'http://placekitten.com/200/300';
+    }
+
+    /**
+     * Scope to order by newest first.
+     */
+    public function scopeLatestFirst($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
 }

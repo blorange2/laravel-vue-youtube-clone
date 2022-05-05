@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');
     Route::post('upload', [VideoUploadController::class, 'store'])->name('video-uploads.store');
 
+    Route::get('videos', [VideoController::class, 'index'])->name('videos.index');
     Route::post('videos', [VideoController::class, 'store'])->name('videos.store');
     Route::put('videos/{video}', [VideoController::class, 'update'])->name('videos.update');
 

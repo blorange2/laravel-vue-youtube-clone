@@ -48,4 +48,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Channel::class, 'user_id', 'id');
     }
+
+    /**
+     * The videos a user owns through their channels.
+     */
+    public function videos()
+    {
+        return $this->hasManyThrough(Video::class, Channel::class);
+    }
 }
