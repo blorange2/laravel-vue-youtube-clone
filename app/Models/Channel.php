@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Channel extends Model
 {
@@ -34,5 +35,17 @@ class Channel extends Model
     public function videos()
     {
         return $this->hasMany(Video::class, 'channel_id', 'id');
+    }
+
+    /**
+     * Retrieve the channel image that was uploaded to Amazon S3.
+     */
+    public function getImage()
+    {
+        if (!is_null($this->image_filename)) {
+            return Storage::disk('s3')->url($this->image_filename);
+        }
+
+        return 'http://placekitten.com/200/300';
     }
 }

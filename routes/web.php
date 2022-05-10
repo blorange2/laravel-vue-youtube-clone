@@ -25,6 +25,8 @@ Auth::routes();
 // Default home route
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('videos/{video}', [VideoController::class, 'show'])->name('videos.show');
+
 Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');
     Route::post('upload', [VideoUploadController::class, 'store'])->name('video-uploads.store');

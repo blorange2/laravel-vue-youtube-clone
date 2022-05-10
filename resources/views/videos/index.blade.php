@@ -18,7 +18,7 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-9">
-                                    <a href="">{{ $video->title }}</a>
+                                    <a href="{{ route('videos.show', $video) }}">{{ $video->title }}</a>
 
                                     <div class="row">
                                         <div class="col-sm-6">
