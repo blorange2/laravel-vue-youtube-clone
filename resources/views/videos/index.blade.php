@@ -22,11 +22,22 @@
 
                                     <div class="row">
                                         <div class="col-sm-6">
+                                            <p>
                                             @if(!$video->isProcessed())
                                                 Processing ({{ $video->processedPercentage() ? $video->processedPercentage() . '%' : ' Starting up' }})
                                             @else
                                                 <span>{{ $video->created_at->toDateTimeString() }}</span>
                                             @endif
+                                            </p>
+                                   
+
+                                            <form action="{{ route('videos.delete', $video) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <a href="{{ route('videos.edit', $video) }}" class="btn btn-primary">Edit</a>
+                                                <input type="submit" value="Delete" class="btn btn-danger">
+                                            </form>
+                                            
                                         </div>
                                         <div class="col-sm-6">
                                             <p>{{ ucfirst($video->visibility) }}</p>
@@ -36,6 +47,8 @@
                             </div>
                         </div>
                     @endforeach
+
+                    {{ $videos->links() }}
                 @else
                 <p>You have no videos to display.</p>
                 @endif

@@ -65,6 +65,9 @@ class Video extends Model
         return $this->processed_percentage;
     }
 
+    /**
+     * Retrieve the video thumbnail.
+     */
     public function getThumbnail()
     {
         if (!$this->isProcessed()) {
@@ -72,6 +75,16 @@ class Video extends Model
         }
 
         return 'http://placekitten.com/200/300';
+    }
+
+    public function votesAllowed()
+    {
+        return $this->allow_votes ? true : false;
+    }
+
+    public function commentsAllowed()
+    {
+        return $this->allow_comments ? true : false;
     }
 
     /**

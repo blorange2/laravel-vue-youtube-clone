@@ -31,7 +31,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('videos', [VideoController::class, 'index'])->name('videos.index');
     Route::post('videos', [VideoController::class, 'store'])->name('videos.store');
+    Route::get('videos/{video}/edit', [VideoController::class, 'edit'])->name('videos.edit');
     Route::put('videos/{video}', [VideoController::class, 'update'])->name('videos.update');
+    Route::delete('videos/{video}', [VideoController::class, 'delete'])->name('videos.delete');
 
     Route::get('channel/{channel}/edit', [ChannelSettingsController::class, 'edit'])->name('channels.edit');
     Route::patch('channel/{channel}', [ChannelSettingsController::class, 'update'])->name('channels.update');
