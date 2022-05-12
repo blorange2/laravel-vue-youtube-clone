@@ -5,12 +5,29 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
 
-            hrhbtfhg
+            @if($video->isPrivate() && auth()->check() && $video->ownedByUser(auth()->user()))
+                <div class="alert alert-info">
+                    Your video is currently private. Only you can see it.
+                </div>
+            @endif
 
+            @if($video->isProcessed() && $video->canBeAccessed(auth()->user()))
+                Show video player.
+            @endif
 
-
-
-
+            @if (!$video->isProcessed())
+                <div class="video-placeholder">
+                    <div class="video-placeholder__header">
+                        This video is processing.
+                    </div>
+                </div>
+            @elseif(!$video->canBeAccessed(auth()->user()))
+                <div class="video-placeholder">
+                    <div class="video-placeholder__header">
+                        This video is private.
+                    </div>
+                </div>
+            @endif
 
             <div class="card mb-3">
                 <div class="card-body">
@@ -26,15 +43,26 @@
                         </a>
 
                         <div class="media-body">
-                            <h5 class="mt-0">{{ $video->channel->name }}</h5>
+                            <a class="media-title" href="{{ route('channels.edit', $video->channel) }}">{{ $video->channel->name }}</a>
+                            Subscribe
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body">
                     {{ $video->description ?? ' No description available.' }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    @if ($video->commentsAllowed())
+                        Comments
+                    @else
+                        Comments are disabled.
+                    @endif
                 </div>
             </div>
         </div>

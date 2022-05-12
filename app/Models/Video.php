@@ -77,14 +77,43 @@ class Video extends Model
         return 'http://placekitten.com/200/300';
     }
 
+    /**
+     * Are votes allowed.
+     */
     public function votesAllowed()
     {
         return $this->allow_votes ? true : false;
     }
 
+    /**
+     * Are comments allowed.
+     */
     public function commentsAllowed()
     {
         return $this->allow_comments ? true : false;
+    }
+
+    public function isPrivate()
+    {
+        return $this->visibility === 'private';
+    }
+
+    public function ownedByUser(User $user)
+    {
+        return $this->channel->user->id === $user->id;
+    }
+
+    public function canBeAccessed(User $user = null)
+    {
+        if (!$user && $this->isPrivate()) {
+            return false;
+        }
+
+        if ($user && $this->isPrivate() && ($user->id !== $this->channel->user->id)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

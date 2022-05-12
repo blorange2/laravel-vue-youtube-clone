@@ -1,0 +1,16 @@
+.video-placeholder{
+    position: relative;
+    background-color: black;
+    color: white;
+    padding-top: 56.25%;
+    width: 100%;
+    max-width: 100%;
+
+    &__header{
+        font-size: 1rem;
+        position: absolute;
+        top: 50%;
+        transform: translateX(-50%);
+        left: 50%;;
+    }
+}

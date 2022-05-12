@@ -43,7 +43,7 @@ class Channel extends Model
     public function getImage()
     {
         if (!is_null($this->image_filename)) {
-            return Storage::disk('s3')->url($this->image_filename);
+            return Storage::disk('s3')->url('profile/' . $this->image_filename);
         }
 
         return 'http://placekitten.com/200/300';
