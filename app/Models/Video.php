@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Video extends Model
 {
@@ -54,7 +55,7 @@ class Video extends Model
      */
     public function isProcessed()
     {
-        return $this->processed;
+        return $this->is_processed ? true : false;
     }
 
     /**
@@ -93,6 +94,9 @@ class Video extends Model
         return $this->allow_comments ? true : false;
     }
 
+    /**
+     * Is this video private?
+     */
     public function isPrivate()
     {
         return $this->visibility === 'private';
@@ -103,6 +107,9 @@ class Video extends Model
         return $this->channel->user->id === $user->id;
     }
 
+    /**
+     * Determine whether a given user can access a video.
+     */
     public function canBeAccessed(User $user = null)
     {
         if (!$user && $this->isPrivate()) {
@@ -114,6 +121,11 @@ class Video extends Model
         }
 
         return true;
+    }
+
+    public function getStreamUrl()
+    {
+        return Storage::disk('s3drop')->url($this->uid . '.mp4');
     }
 
     /**
