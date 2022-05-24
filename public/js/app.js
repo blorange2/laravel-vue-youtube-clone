@@ -7955,15 +7955,44 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      player: null
+      player: null,
+      duration: 0
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     this.player = (0,video_js__WEBPACK_IMPORTED_MODULE_0__["default"])('video');
+    this.player.on('loadedmetadata', function () {
+      _this.duration = Math.round(_this.player.duration());
+    });
+    setInterval(function () {
+      if (_this.hasHitViewQuota()) {
+        console.log("A view happened...");
+
+        _this.createView();
+      }
+    }, 1000);
   },
   beforeDestroy: function beforeDestroy() {
     if (this.player) {
       this.player.dispose();
+    }
+  },
+  methods: {
+    hasHitViewQuota: function hasHitViewQuota() {
+      if (!this.duration) {
+        return false;
+      }
+
+      return Math.round(this.player.currentTime()) === Math.round(10 * this.duration / 100);
+    },
+    createView: function createView() {
+      axios.post('/videos/' + this.videoUid + '/views').then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
     }
   }
 });

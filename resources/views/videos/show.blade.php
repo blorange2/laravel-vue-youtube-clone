@@ -34,7 +34,7 @@
                     <h4>{{ $video->title }}</h4>
 
                     <div class="float-right">
-                    View count here.
+                    {{ $video->viewCount() }} views
                     </div>
 
                     <div class="media">

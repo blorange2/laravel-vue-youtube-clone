@@ -43,11 +43,20 @@ class Video extends Model
         return $this->belongsTo(Channel::class, 'channel_id', 'id');
     }
 
-    public function getUrlAttribute()
+    /**
+     * The views that belong to this video.
+     */
+    public function views()
     {
-        return !is_null($this->uid)
-            ? 'https://google.co.uk'
-            : null;
+        return $this->hasMany(VideoView::class, 'video_id', 'id');
+    }
+
+    /**
+     * Grab the view count.
+     */
+    public function viewCount()
+    {
+        return $this->views->count();
     }
 
     /**

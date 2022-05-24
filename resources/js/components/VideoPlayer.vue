@@ -23,15 +23,46 @@ export default {
     data(){
         return{
             player: null,
+            duration: 0,
         }
     },
     mounted() {
         this.player = videojs('video');
+
+        this.player.on('loadedmetadata', () => {
+            this.duration = Math.round(this.player.duration());
+        })
+
+        setInterval(() => {
+            if(this.hasHitViewQuota()){
+                console.log("A view happened...");
+                this.createView();
+            }
+        }, 1000);
     },
     beforeDestroy() {
         if (this.player) {
             this.player.dispose();
         }
-  }
+    },
+    methods: {
+        hasHitViewQuota(){
+            if(!this.duration){
+                return false;
+            }
+
+            return Math.round(this.player.currentTime()) === Math.round((10 * this.duration) / 100);
+        },
+        createView(){
+            axios.post('/videos/' + this.videoUid + '/views')
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+    }
+
 };
 </script>

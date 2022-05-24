@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChannelSettingsController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoUploadController;
+use App\Http\Controllers\VideoViewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,7 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('videos/{video}', [VideoController::class, 'show'])->name('videos.show');
+Route::post('videos/{video}/views', [VideoViewController::class, 'store'])->name('videos.record-view');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');
