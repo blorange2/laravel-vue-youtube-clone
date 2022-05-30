@@ -5,10 +5,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Searchable;
 
 class Video extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Searchable;
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'videos_index';
+    }
 
     protected $fillable = [
         'uid',
@@ -21,10 +32,6 @@ class Video extends Model
         'allow_votes',
         'allow_comments',
         'processed_percentage'
-    ];
-
-    protected $appends = [
-        'url'
     ];
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChannelSettingsController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoUploadController;
 use App\Http\Controllers\VideoViewController;
@@ -28,6 +29,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('videos/{video}', [VideoController::class, 'show'])->name('videos.show');
 Route::post('videos/{video}/views', [VideoViewController::class, 'store'])->name('videos.record-view');
+
+Route::get('search', [SearchController::class, 'search'])->name('search');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');

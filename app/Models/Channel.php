@@ -4,10 +4,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Scout\Searchable;
 
 class Channel extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
+
+    /**
+     * Get the name of the index associated with the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'channels_index';
+    }
 
     protected $fillable = [
         'name',
@@ -43,7 +54,7 @@ class Channel extends Model
     public function getImage()
     {
         if (!is_null($this->image_filename)) {
-            return Storage::disk('s3')->url('profile/' . $this->image_filename);
+            return Storage::disk('s3')->url($this->image_filename);
         }
 
         return 'http://placekitten.com/200/300';
