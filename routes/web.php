@@ -5,6 +5,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoUploadController;
 use App\Http\Controllers\VideoViewController;
+use App\Http\Controllers\VideoVoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,6 +32,8 @@ Route::get('videos/{video}', [VideoController::class, 'show'])->name('videos.sho
 Route::post('videos/{video}/views', [VideoViewController::class, 'store'])->name('videos.record-view');
 
 Route::get('search', [SearchController::class, 'search'])->name('search');
+
+Route::get('videos/{video}/votes', [VideoVoteController::class, 'show']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');

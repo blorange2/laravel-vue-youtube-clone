@@ -34,7 +34,13 @@
                     <h4>{{ $video->title }}</h4>
 
                     <div class="float-right">
-                    {{ $video->viewCount() }} views
+                        <div class="video__views">
+                            {{ $video->viewCount() }} views
+                        </div>
+
+                        @if($video->votesAllowed())
+                        <video-voting video-uid="{{ $video->uid }}"></video-voting>
+                        @endif
                     </div>
 
                     <div class="media">

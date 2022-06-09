@@ -1786,6 +1786,23 @@ video::-webkit-media-text-track-display {
   left: 50%;
 }
 
+.video__views {
+  font-size: 1.125rem;
+  margin-bottom: 10px;
+}
+.video__voting {
+  font-size: 14px;
+}
+.video__voting-button {
+  color: #636b6f;
+}
+.video__voting-button:focus, .video__voting-button:hover {
+  text-decoration: none;
+}
+.video__voting-button--voted {
+  color: #3097d1;
+}
+
 /*!
  * Bootstrap v4.6.1 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors

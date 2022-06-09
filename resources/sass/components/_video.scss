@@ -14,3 +14,26 @@
         left: 50%;;
     }
 }
+
+.video{
+    &__views{
+        font-size: 1.125rem;
+        margin-bottom: 10px;
+    }
+
+    &__voting{
+        font-size: 14px;
+    }
+
+    &__voting-button{
+        color: #636b6f;
+
+        &:focus, &:hover{
+          text-decoration: none;  
+        }
+
+        &--voted{
+            color: #3097d1;
+        }
+    }
+}
