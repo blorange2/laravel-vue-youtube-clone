@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Traits\Orderable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +10,7 @@ use Laravel\Scout\Searchable;
 
 class Video extends Model
 {
-    use HasFactory, SoftDeletes, Searchable;
+    use HasFactory, SoftDeletes, Searchable, Orderable;
 
     /**
      * Get the name of the index associated with the model.
@@ -74,19 +75,36 @@ class Video extends Model
         return $this->morphMany(Vote::class, 'voteable');
     }
 
+    /**
+     * Upvotes for a video.
+     */
     public function upVotes()
     {
         return $this->votes()->where('type', 'up');
     }
 
+    /**
+     * Downvotes for a video.
+     */
     public function downVotes()
     {
         return $this->votes()->where('type', 'down');
     }
 
+    /**
+     * Retrieve votes from a specific user.
+     */
     public function voteFromUser(User $user)
     {
         return $this->votes()->where('user_id', $user->id);
+    }
+
+    /**
+     * The votes this video has.
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     /**
@@ -165,13 +183,5 @@ class Video extends Model
     public function getStreamUrl()
     {
         return Storage::disk('s3drop')->url($this->uid . '.mp4');
-    }
-
-    /**
-     * Scope to order by newest first.
-     */
-    public function scopeLatestFirst($query)
-    {
-        return $query->orderBy('created_at', 'desc');
     }
 }
