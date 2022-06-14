@@ -1,10 +1,10 @@
 <template>
     <div class="video__voting">
-        <a href="" class="video__voting-button" v-bind:class="{'video__voting-button--voted' : userVote == 'up'}">
+        <a @click.prevent="vote('up')" href="" class="video__voting-button" v-bind:class="{'video__voting-button--voted' : userVote == 'up'}">
             <i class="fa-solid fa-thumbs-up"></i>
         </a> {{ up }} &nbsp;
 
-        <a href="" class="video__voting-button" v-bind:class="{'video__voting-button--voted' : userVote == 'down'}">
+        <a @click.prevent="vote('down')" href="" class="video__voting-button" v-bind:class="{'video__voting-button--voted' : userVote == 'down'}">
             <i class="fa-solid fa-thumbs-down"></i>
         </a> {{ down }} &nbsp;
     </div>
@@ -38,6 +38,41 @@ export default {
                 }).catch((err) => {
                     console.log(err);
                 });
+        },
+        vote(type){
+            if(this.userVote == type){
+                this[type]--;
+                this.userVote = null;
+                this.deleteVote(type);
+                return;
+            }
+
+            if(this.userVote){
+                this[type == 'up' ? 'down' : 'up']--;
+            }
+
+            this[type]++;
+            this.userVote = type;
+
+            this.createVote(type);
+        },
+        deleteVote(type){
+            axios.delete('/videos/' + this.videoUid + '/votes')
+            .then((response) => {
+                
+            }).catch((err) => {
+                console.log(err);
+            });
+        },
+        createVote(type){
+            axios.post('/videos/' + this.videoUid + '/votes', {
+                'type': type
+            })
+            .then((response) => {
+
+            }).catch((err) => {
+                console.log(err);
+            });
         }
     }
 }

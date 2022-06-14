@@ -47,4 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('channel/{channel}/edit', [ChannelSettingsController::class, 'edit'])->name('channels.edit');
     Route::patch('channel/{channel}', [ChannelSettingsController::class, 'update'])->name('channels.update');
+
+    Route::post('videos/{video}/votes', [VideoVoteController::class, 'store']);
+    Route::delete('videos/{video}/votes', [VideoVoteController::class, 'destroy']);
 });

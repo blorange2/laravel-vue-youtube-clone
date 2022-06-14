@@ -66,30 +66,28 @@ class VideoPolicy
      */
     public function delete(User $user, Video $video)
     {
-        //
+        if ($user->id === $video->channel->user_id) {
+            return true;
+        }
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can vote on the model.
      *
      * @param  \App\Models\User                      $user
      * @param  \App\Models\Video                     $video
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Video $video)
+    public function vote(User $user, Video $video)
     {
-        //
-    }
+        if (!$video->canBeAccessed($user)) {
+            return false;
+        }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param  \App\Models\User                      $user
-     * @param  \App\Models\Video                     $video
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function forceDelete(User $user, Video $video)
-    {
-        //
+        if (!$video->votesAllowed()) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -8207,6 +8207,34 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         console.log(err);
       });
+    },
+    vote: function vote(type) {
+      if (this.userVote == type) {
+        this[type]--;
+        this.userVote = null;
+        this.deleteVote(type);
+        return;
+      }
+
+      if (this.userVote) {
+        this[type == 'up' ? 'down' : 'up']--;
+      }
+
+      this[type]++;
+      this.userVote = type;
+      this.createVote(type);
+    },
+    deleteVote: function deleteVote(type) {
+      axios["delete"]('/videos/' + this.videoUid + '/votes').then(function (response) {})["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    createVote: function createVote(type) {
+      axios.post('/videos/' + this.videoUid + '/votes', {
+        'type': type
+      }).then(function (response) {})["catch"](function (err) {
+        console.log(err);
+      });
     }
   }
 });
@@ -108099,6 +108127,12 @@ var render = function () {
         staticClass: "video__voting-button",
         class: { "video__voting-button--voted": _vm.userVote == "up" },
         attrs: { href: "" },
+        on: {
+          click: function ($event) {
+            $event.preventDefault()
+            return _vm.vote("up")
+          },
+        },
       },
       [_c("i", { staticClass: "fa-solid fa-thumbs-up" })]
     ),
@@ -108109,6 +108143,12 @@ var render = function () {
         staticClass: "video__voting-button",
         class: { "video__voting-button--voted": _vm.userVote == "down" },
         attrs: { href: "" },
+        on: {
+          click: function ($event) {
+            $event.preventDefault()
+            return _vm.vote("down")
+          },
+        },
       },
       [_c("i", { staticClass: "fa-solid fa-thumbs-down" })]
     ),
