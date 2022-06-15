@@ -3,7 +3,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CommentResource extends JsonResource
+class ChannelResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,13 +15,9 @@ class CommentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'body' => $this->body,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'created_at_human' => $this->created_at->diffForHumans(),
-            'channel' => (new ChannelResource($this->commentable->channel)),
-            'replies' => CommentResource::collection($this->replies)
-
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'image' => $this->getImage(),
         ];
     }
 }

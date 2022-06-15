@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChannelSettingsController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\VideoCommentController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\VideoUploadController;
 use App\Http\Controllers\VideoViewController;
@@ -34,6 +35,8 @@ Route::post('videos/{video}/views', [VideoViewController::class, 'store'])->name
 Route::get('search', [SearchController::class, 'search'])->name('search');
 
 Route::get('videos/{video}/votes', [VideoVoteController::class, 'show']);
+
+Route::get('videos/{video}/comments', [VideoCommentController::class, 'index']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('upload', [VideoUploadController::class, 'index'])->name('video-uploads.index');

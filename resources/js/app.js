@@ -22,6 +22,7 @@ window.Vue = require('vue').default;
 Vue.component('video-upload', require('./components/VideoUpload.vue').default);
 Vue.component('video-player', require('./components/VideoPlayer.vue').default);
 Vue.component('video-voting', require('./components/VideoVoting.vue').default);
+Vue.component('video-comments', require('./components/VideoComments.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
