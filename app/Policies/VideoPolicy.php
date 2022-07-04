@@ -90,4 +90,24 @@ class VideoPolicy
 
         return true;
     }
+
+    /**
+     * Determine whether the user can vote on the model.
+     *
+     * @param  \App\Models\User                      $user
+     * @param  \App\Models\Video                     $video
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function comment(User $user, Video $video)
+    {
+        if (!$video->canBeAccessed($user)) {
+            return false;
+        }
+
+        if (!$video->commentsAllowed()) {
+            return false;
+        }
+
+        return true;
+    }
 }

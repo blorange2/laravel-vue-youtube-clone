@@ -53,4 +53,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('videos/{video}/votes', [VideoVoteController::class, 'store']);
     Route::delete('videos/{video}/votes', [VideoVoteController::class, 'destroy']);
+
+    Route::post('videos/{video}/comments', [VideoCommentController::class, 'store']);
+    Route::delete('videos/{video}/comments/{comment}', [VideoCommentController::class, 'delete']);
 });

@@ -7968,13 +7968,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     videoUid: null
   },
   data: function data() {
     return {
-      comments: []
+      comments: [],
+      body: null,
+      replyBody: null,
+      replyFormVisible: null
     };
   },
   mounted: function mounted() {
@@ -7990,6 +8024,80 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         console.log(err);
       });
+    },
+    createComment: function createComment() {
+      var _this2 = this;
+
+      axios.post('/videos/' + this.videoUid + '/comments', {
+        'body': this.body
+      }).then(function (response) {
+        _this2.comments.unshift(response.data.data);
+
+        _this2.body = null;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    createReply: function createReply(commentId) {
+      var _this3 = this;
+
+      axios.post('/videos/' + this.videoUid + '/comments', {
+        'body': this.replyBody,
+        'reply_id': commentId
+      }).then(function (response) {
+        _this3.comments.map(function (comment, index) {
+          if (comment.id === commentId) {
+            _this3.comments[index].replies.push(response.data.data);
+          }
+        });
+
+        _this3.replyBody = null;
+        _this3.replyFormVisible = null;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    deleteComment: function deleteComment(commentId) {
+      var _this4 = this;
+
+      if (!confirm("Are you sure?")) {
+        return null;
+      }
+
+      axios["delete"]('/videos/' + this.videoUid + '/comments/' + commentId).then(function (response) {
+        _this4.deleteById(commentId);
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    },
+    deleteById: function deleteById(commentId) {
+      var _this5 = this;
+
+      this.comments.map(function (comment, index) {
+        if (comment.id === commentId) {
+          _this5.comments.splice(index, 1);
+
+          return;
+        }
+
+        comments.replies.map(function (reply, replyIndex) {
+          if (reply.id === commentId) {
+            _this5.comments[index].replies.splice(replyIndex, 1);
+
+            return;
+          }
+        });
+      });
+    },
+    toggleReplyForm: function toggleReplyForm(commentId) {
+      this.replyBody = null;
+
+      if (this.replyFormVisible === commentId) {
+        this.replyFormVisible = null;
+        return;
+      }
+
+      this.replyFormVisible = commentId;
     }
   }
 });
@@ -108033,6 +108141,48 @@ var render = function () {
   return _c("div", [
     _c("p", [_vm._v(_vm._s(_vm.comments.length) + " comments")]),
     _vm._v(" "),
+    _c("div", { staticClass: "video-comment clearfix" }, [
+      _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.body,
+            expression: "body",
+          },
+        ],
+        staticClass: "form-control video-comment__input mb-2",
+        attrs: {
+          placeholder: "Say something.",
+          name: "",
+          id: "",
+          cols: "30",
+          rows: "3",
+        },
+        domProps: { value: _vm.body },
+        on: {
+          input: function ($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.body = $event.target.value
+          },
+        },
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { type: "submit" },
+            on: { click: _vm.createComment },
+          },
+          [_vm._v("Post")]
+        ),
+      ]),
+    ]),
+    _vm._v(" "),
     _c(
       "ul",
       { staticClass: "media-list" },
@@ -108059,6 +108209,91 @@ var render = function () {
               ),
               _c("p", [_vm._v(_vm._s(comment.body))]),
               _vm._v(" "),
+              _c("ul", { staticClass: "list-inline" }, [
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "#" },
+                      on: {
+                        click: function ($event) {
+                          $event.preventDefault()
+                          return _vm.toggleReplyForm(comment.id)
+                        },
+                      },
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(
+                          _vm.replyFormVisible === comment.id
+                            ? "Cancel"
+                            : "Reply"
+                        )
+                      ),
+                    ]
+                  ),
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "#" },
+                      on: {
+                        click: function ($event) {
+                          $event.preventDefault()
+                          return _vm.deleteComment(comment.id)
+                        },
+                      },
+                    },
+                    [_vm._v("Delete comment")]
+                  ),
+                ]),
+              ]),
+              _vm._v(" "),
+              _vm.replyFormVisible === comment.id
+                ? _c("div", { staticClass: "video-comment" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.replyBody,
+                          expression: "replyBody",
+                        },
+                      ],
+                      staticClass: "form-control mb-2",
+                      attrs: { name: "", id: "", cols: "30", rows: "3" },
+                      domProps: { value: _vm.replyBody },
+                      on: {
+                        input: function ($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.replyBody = $event.target.value
+                        },
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "float-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.createReply(comment.id)
+                            },
+                          },
+                        },
+                        [_vm._v("Reply")]
+                      ),
+                    ]),
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
               _vm._l(comment.replies, function (reply) {
                 return _c("div", { staticClass: "media ml-3" }, [
                   _c("div", { staticClass: "media-left" }, [
@@ -108080,6 +108315,24 @@ var render = function () {
                         "\n\n                        "
                     ),
                     _c("p", [_vm._v(_vm._s(reply.body))]),
+                    _vm._v(" "),
+                    _c("ul", { staticClass: "list-inline" }, [
+                      _c("li", [
+                        _c(
+                          "a",
+                          {
+                            attrs: { href: "#" },
+                            on: {
+                              click: function ($event) {
+                                $event.preventDefault()
+                                return _vm.deleteComment(comment.id)
+                              },
+                            },
+                          },
+                          [_vm._v("Delete comment")]
+                        ),
+                      ]),
+                    ]),
                   ]),
                 ])
               }),
